@@ -29,11 +29,14 @@ import pandas as pd
 import tensorflow as tf
 import tensorflow_probability as tfp
 
+from dotenv import load_dotenv
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorboard.plugins import projector
 
-sys.path.append("/Users/nknyazev/Documents/Radboud/Research/Projects/uncertainty_mf/code")
+load_dotenv()
+PROJECT_ROOT = os.getenv("PROJECT_ROOT")
+sys.path.append(os.path.join(PROJECT_ROOT, "code"))
 
 from modules.models.rec_layers import *
 from modules.models.rec_losses import *
@@ -41,7 +44,7 @@ from modules.models.rec_models import *
 from modules.utils import *
 
 # %%
-data_df = pd.read_csv("../../data/raw/ml-1m/ratings.dat", sep="::", names=["uid", "iid", "rating", "t"])
+data_df = pd.read_csv(os.path.join(PROJECT_ROOT, "data", "raw", "ml-1m", "ratings.dat"), sep="::", names=["uid", "iid", "rating", "t"])
 observed_data = data_df.drop("t", axis=1).values
 
 # %%
@@ -264,7 +267,7 @@ new_model.fit(
 
 # %%
 # Set up a logs directory, so Tensorboard knows where to look for files.
-log_dir='/Users/nknyazev/Documents/Radboud/Research/Projects/uncertainty_mf/logs/tensorboard/new/toy_example/embeddings/'
+log_dir = os.path.join(PROJECT_ROOT, "logs", "tensorboard", "new", "toy_example", "embeddings")
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
